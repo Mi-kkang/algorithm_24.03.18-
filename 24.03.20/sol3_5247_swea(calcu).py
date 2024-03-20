@@ -1,0 +1,46 @@
+from collections import deque
+
+def bfs(N,M) :
+    q = [0] * 1000000           # 큐 생성
+    front = -1
+    rear = -1
+    rear += 1
+    q[rear] = N                 # 시작점 인큐
+    visited = [0] * 1000001     # visited 생성
+    visited[N] = 1              # 시작점 표시
+
+    while q :                   # 큐에 탐색할 노드가 남아있으면
+        front += 1
+        t = q[front]            # 디큐
+        if t == M :
+            return visited[t] -1
+        # t에 인접한 w, 방문한 적이 없으면(visited[w] = 0)
+        if t - 10 > 0 and visited[t-10] == 0:
+            # w = t - 10
+            rear += 1
+            q[rear] = t - 10
+            visited[t-10] = visited[t] + 1
+
+        if 0 < t - 1 and visited[t-1] == 0 :
+            rear += 1
+            q[rear] = t-1
+            visited[t-1] = visited[t] + 1
+
+        if t + 1 <= 1000000 and visited[t+1] == 0 :
+            rear += 1
+            q[rear] = t + 1
+            visited[t+1] = visited[t] + 1
+
+        if t * 2 <= 1000000 and visited[t*2] == 0 :
+            rear += 1
+            q[rear] = t * 2
+            visited[t*2] = visited[t] + 1
+
+    return  -1      # 디버깅용 리턴...
+
+t = int(input())            # 테스트 케이스 개수 받기
+
+for tc in range(1, t+1) :
+    N, M = map(int, input().split())    # 시작 자연수 N / 목표 자연수 M
+
+    print(f'#{tc} {bfs(N,M)}')
